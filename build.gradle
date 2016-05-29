@@ -21,8 +21,8 @@ plugins {
 }
 */
 version = "1.0"
-group= "me.dmillerw.minions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "RoboticMinions"
+group= "me.dmillerw.circuit" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "WiresAndCircuits"
 
 minecraft {
     version = "1.9.4-12.17.0.1909-1.9.4"
