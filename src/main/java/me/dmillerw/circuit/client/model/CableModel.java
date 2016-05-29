@@ -32,8 +32,8 @@ public class CableModel implements IModel {
     @Override
     public Collection<ResourceLocation> getTextures() {
         return ImmutableSet.of(
-                ModInfo.resourceLocation("block/cable"),
-                ModInfo.resourceLocation("block/cable_end")
+                ModInfo.resourceLocation("blocks/cable"),
+                ModInfo.resourceLocation("blocks/cable_end")
         );
     }
 

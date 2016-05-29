@@ -33,8 +33,8 @@ public class CableBakedModel implements IBakedModel {
 
     public CableBakedModel(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         this.format = format;
-        this.sprite = bakedTextureGetter.apply(ModInfo.resourceLocation("block/cable"));
-        this.spriteEnd = bakedTextureGetter.apply(ModInfo.resourceLocation("block/cable_end"));
+        this.sprite = bakedTextureGetter.apply(ModInfo.resourceLocation("blocks/cable"));
+        this.spriteEnd = bakedTextureGetter.apply(ModInfo.resourceLocation("blocks/cable_end"));
     }
 
     private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal, double x, double y, double z, float u, float v) {
@@ -65,6 +65,7 @@ public class CableBakedModel implements IBakedModel {
 
     private BakedQuad createQuad(Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite sprite) {
         Vec3d normal = v1.subtract(v2).crossProduct(v3.subtract(v2));
+        normal = normal.normalize();
 
         UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
         builder.setTexture(sprite);
