@@ -37,6 +37,10 @@ import javax.annotation.Nullable;
  */
 public class BlockCable extends BlockContainer {
 
+    public static final double CABLE_SIZE = 0.4D;
+    public static final double CONNECTOR_SIZE = 0.3D;
+    public static final double CONNECTOR_DEPTH = 0.2D;
+
     public static final String NAME = "cable";
 
     public static final UnlistedConnectionType DOWN = new UnlistedConnectionType("down");

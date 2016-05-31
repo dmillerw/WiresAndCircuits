@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static me.dmillerw.circuit.block.cable.BlockCable.CABLE_SIZE;
+import static me.dmillerw.circuit.block.cable.BlockCable.CONNECTOR_DEPTH;
+import static me.dmillerw.circuit.block.cable.BlockCable.CONNECTOR_SIZE;
+
 /**
  * @author dmillerw
  */
@@ -126,486 +130,482 @@ public class CableBakedModel implements IBakedModel {
         EnumConnectionType down = extendedBlockState.getValue(BlockCable.DOWN);
 
         List<BakedQuad> quads = new ArrayList<>();
-        double cableSize = .4;
-
-        double connectorSize = .3;
-        double connectorDepth = .2;
 
         // Y - 1 - 0
         if (up.renderCable()) {
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, 1, cableSize),
-                    new Vec3d(1 - cableSize, 1, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(cableSize, 1, 1 - cableSize),
-                    new Vec3d(cableSize, 1, cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, cableSize),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1, cableSize),
-                    new Vec3d(1 - cableSize, 1, cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, cableSize),
+                    new Vec3d(CABLE_SIZE, 1, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1, 1 - cableSize),
-                    new Vec3d(cableSize, 1, 1 - cableSize),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1, 1 - CABLE_SIZE),
                     spriteCable, 2));
 
             if (up.renderConnector()) {
                 // CONNECTOR
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorSize, 1 - connectorDepth, connectorSize),
-                        new Vec3d(1 - connectorSize, 1, connectorSize),
-                        new Vec3d(1 - connectorSize, 1, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 1 - connectorDepth, 1 - connectorSize),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 1 - connectorDepth, 1 - connectorSize),
-                        new Vec3d(connectorSize, 1, 1 - connectorSize),
-                        new Vec3d(connectorSize, 1, connectorSize),
-                        new Vec3d(connectorSize, 1 - connectorDepth, connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 1, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 1, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize,     1, connectorSize),
-                        new Vec3d(1 - connectorSize, 1, connectorSize),
-                        new Vec3d(1 - connectorSize, 1 - connectorDepth, connectorSize),
-                        new Vec3d(connectorSize,     1 - connectorDepth, connectorSize),
+                        new Vec3d(CONNECTOR_SIZE,     1, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE,     1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize,     1 - connectorDepth, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 1 - connectorDepth, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 1, 1 - connectorSize),
-                        new Vec3d(connectorSize,     1, 1 - connectorSize),
+                        new Vec3d(CONNECTOR_SIZE,     1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE,     1, 1 - CONNECTOR_SIZE),
                         spriteCableEnd, 2));
 
                 // CONNECTOR CAP
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 1 - connectorDepth, connectorSize),
-                        new Vec3d(1 - connectorSize, 1 - connectorDepth, connectorSize),
-                        new Vec3d(1 - connectorSize, 1 - connectorDepth, 1 - connectorSize),
-                        new Vec3d(connectorSize, 1 - connectorDepth, 1 - connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 0.999, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 0.999, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 0.999, connectorSize),
-                        new Vec3d(connectorSize, 0.999, connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, 0.999, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0.999, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0.999, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 0.999, CONNECTOR_SIZE),
                         spriteCableEnd));
             }
         } else {
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, cableSize),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     spriteCableEnd));
         }
 
         // Y - 0 - 1
         if (down.renderCable()) {
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, 0, cableSize),
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 0, 1 - cableSize),
+                    new Vec3d(1 - CABLE_SIZE, 0, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 0, 1 - CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, 0, 1 - cableSize),
-                    new Vec3d(cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(cableSize, cableSize, cableSize),
-                    new Vec3d(cableSize, 0, cableSize),
+                    new Vec3d(CABLE_SIZE, 0, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 0, CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, cableSize, cableSize),
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
-                    new Vec3d(1 - cableSize, 0, cableSize),
-                    new Vec3d(cableSize, 0, cableSize),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 0, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 0, CABLE_SIZE),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, 0, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 0, 1 - cableSize),
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(cableSize, cableSize, 1 - cableSize),
+                    new Vec3d(CABLE_SIZE, 0, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 0, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCable, 2));
 
             if (down.renderConnector()) {
                 // CONNECTOR
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorSize, 0, connectorSize),
-                        new Vec3d(1 - connectorSize, connectorDepth, connectorSize),
-                        new Vec3d(1 - connectorSize, connectorDepth, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 0, 1 - connectorSize),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 0, 1 - connectorSize),
-                        new Vec3d(connectorSize, connectorDepth, 1 - connectorSize),
-                        new Vec3d(connectorSize, connectorDepth, connectorSize),
-                        new Vec3d(connectorSize, 0, connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorDepth, connectorSize),
-                        new Vec3d(1 - connectorSize, connectorDepth, connectorSize),
-                        new Vec3d(1 - connectorSize, 0, connectorSize),
-                        new Vec3d(connectorSize, 0, connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 0, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, 0, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, connectorDepth, 1 - connectorSize),
-                        new Vec3d(connectorSize, connectorDepth, 1 - connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         spriteCableEnd, 2));
 
                 // CONNECTOR CAP
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 0.001, connectorSize),
-                        new Vec3d(1 - connectorSize, 0.001, connectorSize),
-                        new Vec3d(1 - connectorSize, 0.001, 1 - connectorSize),
-                        new Vec3d(connectorSize, 0.001, 1 - connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, 0.001, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0.001, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, 0.001, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, 0.001, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorDepth, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, connectorDepth, 1 - connectorSize),
-                        new Vec3d(1 - connectorSize, connectorDepth, connectorSize),
-                        new Vec3d(connectorSize, connectorDepth, connectorSize),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         spriteCableEnd));
             }
         } else {
-            quads.add(createQuad(new Vec3d(cableSize, cableSize, cableSize), new Vec3d(1 - cableSize, cableSize, cableSize), new Vec3d(1 - cableSize, cableSize, 1 - cableSize), new Vec3d(cableSize, cableSize, 1 - cableSize), spriteCableEnd));
+            quads.add(createQuad(new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), spriteCableEnd));
         }
 
         // X - 0 - 1
         if (east.renderCable()) {
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
-                    new Vec3d(1, cableSize, cableSize),
-                    new Vec3d(1, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1, 1 - cableSize, cableSize),
-                    new Vec3d(1, cableSize, cableSize),
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     spriteCable));
 
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1, cableSize, 1 - cableSize),
-                    new Vec3d(1, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCable));
 
             if (east.renderConnector()) {
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorDepth, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(1, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(1, 1 - connectorSize, connectorSize),
-                        new Vec3d(1 - connectorDepth, 1 - connectorSize, connectorSize),
+                        new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorDepth, connectorSize, connectorSize),
-                        new Vec3d(1, connectorSize, connectorSize),
-                        new Vec3d(1, connectorSize, 1 - connectorSize),
-                        new Vec3d(1 - connectorDepth, connectorSize, 1 - connectorSize),
+                        new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorDepth, 1 - connectorSize, connectorSize),
-                        new Vec3d(1, 1 - connectorSize, connectorSize),
-                        new Vec3d(1, connectorSize, connectorSize),
-                        new Vec3d(1 - connectorDepth, connectorSize, connectorSize),
+                        new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorDepth, connectorSize, 1 - connectorSize),
-                        new Vec3d(1, connectorSize, 1 - connectorSize),
-                        new Vec3d(1, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(1 - connectorDepth, 1 - connectorSize, 1 - connectorSize),
+                        new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(0.999, connectorSize, connectorSize),
-                        new Vec3d(0.999, 1 - connectorSize, connectorSize),
-                        new Vec3d(0.999, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(0.999, connectorSize, 1 - connectorSize),
+                        new Vec3d(0.999, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(0.999, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(0.999, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(0.999, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorDepth, connectorSize, 1 - connectorSize),
-                        new Vec3d(1 - connectorDepth, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(1 - connectorDepth, 1 - connectorSize, connectorSize),
-                        new Vec3d(1 - connectorDepth, connectorSize, connectorSize),
+                        new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         spriteCableEnd));
             }
         } else {
-            quads.add(createQuad(new Vec3d(1 - cableSize, cableSize, cableSize), new Vec3d(1 - cableSize, 1 - cableSize, cableSize), new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize), new Vec3d(1 - cableSize, cableSize, 1 - cableSize), spriteCableEnd));
+            quads.add(createQuad(new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), spriteCableEnd));
         }
 
         if (west.renderCable()) {
             quads.add(createQuad(
-                    new Vec3d(0, 1 - cableSize, 1 - cableSize), 
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize), 
-                    new Vec3d(cableSize, 1 - cableSize, cableSize), 
-                    new Vec3d(0, 1 - cableSize, cableSize), 
+                    new Vec3d(0, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), 
+                    new Vec3d(0, 1 - CABLE_SIZE, CABLE_SIZE), 
                     spriteCable));
             
             quads.add(createQuad(
-                    new Vec3d(0, cableSize, cableSize), 
-                    new Vec3d(cableSize, cableSize, cableSize), 
-                    new Vec3d(cableSize, cableSize, 1 - cableSize), 
-                    new Vec3d(0, cableSize, 1 - cableSize), 
+                    new Vec3d(0, CABLE_SIZE, CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), 
+                    new Vec3d(0, CABLE_SIZE, 1 - CABLE_SIZE), 
                     spriteCable));
             
             quads.add(createQuad(
-                    new Vec3d(0, 1 - cableSize, cableSize), 
-                    new Vec3d(cableSize, 1 - cableSize, cableSize), 
-                    new Vec3d(cableSize, cableSize, cableSize), 
-                    new Vec3d(0, cableSize, cableSize), 
+                    new Vec3d(0, 1 - CABLE_SIZE, CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), 
+                    new Vec3d(0, CABLE_SIZE, CABLE_SIZE), 
                     spriteCable));
             
             quads.add(createQuad(
-                    new Vec3d(0, cableSize, 1 - cableSize), 
-                    new Vec3d(cableSize, cableSize, 1 - cableSize), 
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize), 
-                    new Vec3d(0, 1 - cableSize, 1 - cableSize), 
+                    new Vec3d(0, CABLE_SIZE, 1 - CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), 
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
+                    new Vec3d(0, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
                     spriteCable));
 
             if (west.renderConnector()) {
                 quads.add(createQuad(
-                        new Vec3d(0, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(connectorDepth, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(connectorDepth, 1 - connectorSize, connectorSize),
-                        new Vec3d(0, 1 - connectorSize, connectorSize),
+                        new Vec3d(0, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(0, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         spriteCableEnd));
                 
                 quads.add(createQuad(
-                        new Vec3d(0, connectorSize, connectorSize),
-                        new Vec3d(connectorDepth, connectorSize, connectorSize),
-                        new Vec3d(connectorDepth, connectorSize, 1 - connectorSize),
-                        new Vec3d(0, connectorSize, 1 - connectorSize),
+                        new Vec3d(0, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(0, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
                 
                 quads.add(createQuad(
-                        new Vec3d(0, 1 - connectorSize, connectorSize),
-                        new Vec3d(connectorDepth, 1 - connectorSize, connectorSize),
-                        new Vec3d(connectorDepth, connectorSize, connectorSize),
-                        new Vec3d(0, connectorSize, connectorSize),
+                        new Vec3d(0, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(0, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         spriteCableEnd));
                 
                 quads.add(createQuad(
-                        new Vec3d(0, connectorSize, 1 - connectorSize),
-                        new Vec3d(connectorDepth, connectorSize, 1 - connectorSize),
-                        new Vec3d(connectorDepth, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(0, 1 - connectorSize, 1 - connectorSize),
+                        new Vec3d(0, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(0, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorDepth, connectorSize, connectorSize),
-                        new Vec3d(connectorDepth, 1 - connectorSize, connectorSize),
-                        new Vec3d(connectorDepth, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(connectorDepth, connectorSize, 1 - connectorSize),
+                        new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(0.001, connectorSize, 1 - connectorSize),
-                        new Vec3d(0.001, 1 - connectorSize, 1 - connectorSize),
-                        new Vec3d(0.001, 1 - connectorSize, connectorSize),
-                        new Vec3d(0.001, connectorSize, connectorSize),
+                        new Vec3d(0.001, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(0.001, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
+                        new Vec3d(0.001, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
+                        new Vec3d(0.001, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         spriteCableEnd));
             }
         } else {
-            quads.add(createQuad(new Vec3d(cableSize, cableSize, 1 - cableSize), new Vec3d(cableSize, 1 - cableSize, 1 - cableSize), new Vec3d(cableSize, 1 - cableSize, cableSize), new Vec3d(cableSize, cableSize, cableSize), spriteCableEnd));
+            quads.add(createQuad(new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), spriteCableEnd));
         }
 
         if (north.renderCable()) {
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 0),
-                    new Vec3d(cableSize, 1 - cableSize, 0),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 0),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 0),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, cableSize, 0),
-                    new Vec3d(1 - cableSize, cableSize, 0),
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
-                    new Vec3d(cableSize, cableSize, cableSize),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 0),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 0),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, cableSize, 0),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 0),
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 0),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 0),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, cableSize, cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, 0),
-                    new Vec3d(cableSize, cableSize, 0),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 0),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 0),
                     spriteCable, 2));
 
             if (north.renderConnector()) {
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 1 - connectorSize, connectorDepth),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, connectorDepth),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 0),
-                        new Vec3d(connectorSize, 1 - connectorSize, 0),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorSize, 0),
-                        new Vec3d(1 - connectorSize, connectorSize, 0),
-                        new Vec3d(1 - connectorSize, connectorSize, connectorDepth),
-                        new Vec3d(connectorSize, connectorSize, connectorDepth),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorSize, connectorSize, 0),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 0),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, connectorDepth),
-                        new Vec3d(1 - connectorSize, connectorSize, connectorDepth),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorSize, connectorDepth),
-                        new Vec3d(connectorSize, 1 - connectorSize, connectorDepth),
-                        new Vec3d(connectorSize, 1 - connectorSize, 0),
-                        new Vec3d(connectorSize, connectorSize, 0),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorSize, connectorDepth),
-                        new Vec3d(1 - connectorSize, connectorSize, connectorDepth),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, connectorDepth),
-                        new Vec3d(connectorSize, 1 - connectorSize, connectorDepth),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 1 - connectorSize, 0.001),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize,  0.001),
-                        new Vec3d(1 - connectorSize, connectorSize,  0.001),
-                        new Vec3d(connectorSize, connectorSize,  0.001),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0.001),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE,  0.001),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE,  0.001),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE,  0.001),
                         spriteCableEnd));
             }
         } else {
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, cableSize),
-                    new Vec3d(1 - cableSize, cableSize, cableSize),
-                    new Vec3d(cableSize, cableSize, cableSize),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     spriteCableEnd));
         }
 
         if (south.renderCable()) {
             quads.add(createQuad(
-                    new Vec3d(cableSize, 1 - cableSize, 1),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, cableSize, 1),
-                    new Vec3d(cableSize, cableSize, 1),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1),
-                    new Vec3d(1 - cableSize, cableSize, 1),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1),
                     spriteCable, 2));
 
             quads.add(createQuad(
-                    new Vec3d(cableSize, cableSize, 1),
-                    new Vec3d(cableSize, 1 - cableSize, 1),
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(cableSize, cableSize, 1 - cableSize),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCable, 2));
 
             if (south.renderConnector()) {
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 1 - connectorSize, 1),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 1),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 1 - connectorDepth),
-                        new Vec3d(connectorSize, 1 - connectorSize, 1 - connectorDepth),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorSize, 1 - connectorDepth),
-                        new Vec3d(1 - connectorSize, connectorSize, 1 - connectorDepth),
-                        new Vec3d(1 - connectorSize, connectorSize, 1),
-                        new Vec3d(connectorSize, connectorSize, 1),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(1 - connectorSize, connectorSize, 1 - connectorDepth),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 1 - connectorDepth),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 1),
-                        new Vec3d(1 - connectorSize, connectorSize, 1),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorSize, 1),
-                        new Vec3d(connectorSize, 1 - connectorSize, 1),
-                        new Vec3d(connectorSize, 1 - connectorSize, 1 - connectorDepth),
-                        new Vec3d(connectorSize, connectorSize, 1 - connectorDepth),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         spriteCableEnd, 2));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, 1 - connectorSize, 1 - connectorDepth),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize, 1 - connectorDepth),
-                        new Vec3d(1 - connectorSize, connectorSize, 1 - connectorDepth),
-                        new Vec3d(connectorSize, connectorSize, 1 - connectorDepth),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         spriteCableEnd));
 
                 quads.add(createQuad(
-                        new Vec3d(connectorSize, connectorSize,  0.999),
-                        new Vec3d(1 - connectorSize, connectorSize,  0.999),
-                        new Vec3d(1 - connectorSize, 1 - connectorSize,  0.999),
-                        new Vec3d(connectorSize, 1 - connectorSize, 0.999),
+                        new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE,  0.999),
+                        new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE,  0.999),
+                        new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE,  0.999),
+                        new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0.999),
                         spriteCableEnd));
             }
         } else {
             quads.add(createQuad(
-                    new Vec3d(cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, cableSize, 1 - cableSize),
-                    new Vec3d(1 - cableSize, 1 - cableSize, 1 - cableSize),
-                    new Vec3d(cableSize, 1 - cableSize, 1 - cableSize),
+                    new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
+                    new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     spriteCableEnd));
         }
 
