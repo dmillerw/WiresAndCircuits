@@ -5,11 +5,11 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 /**
  * @author dmillerw
  */
-public class UnlistedBoolean implements IUnlistedProperty<Boolean> {
+public class UnlistedConnectionType implements IUnlistedProperty<EnumConnectionType> {
 
     private final String name;
 
-    public UnlistedBoolean(String name) {
+    public UnlistedConnectionType(String name) {
         this.name = name;
     }
 
@@ -19,17 +19,17 @@ public class UnlistedBoolean implements IUnlistedProperty<Boolean> {
     }
 
     @Override
-    public boolean isValid(Boolean value) {
+    public boolean isValid(EnumConnectionType value) {
         return true;
     }
 
     @Override
-    public Class<Boolean> getType() {
-        return Boolean.class;
+    public Class<EnumConnectionType> getType() {
+        return EnumConnectionType.class;
     }
 
     @Override
-    public String valueToString(Boolean value) {
+    public String valueToString(EnumConnectionType value) {
         return value.toString();
     }
 }

@@ -1,4 +1,4 @@
-package me.dmillerw.circuit.client.model;
+package me.dmillerw.circuit.client.model.cable;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
@@ -32,8 +32,8 @@ public class CableModel implements IModel {
     @Override
     public Collection<ResourceLocation> getTextures() {
         return ImmutableSet.of(
-                ModInfo.resourceLocation("blocks/cable"),
-                ModInfo.resourceLocation("blocks/cable_end")
+                new ResourceLocation(ModInfo.ID, "blocks/cable"),
+                new ResourceLocation(ModInfo.ID, "blocks/cable_end")
         );
     }
 

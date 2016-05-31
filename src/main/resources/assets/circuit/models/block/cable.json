@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "circuit:block/cable_end"
+    "all": "circuit:blocks/cable"
   }
 }

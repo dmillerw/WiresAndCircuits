@@ -1,7 +1,7 @@
 package me.dmillerw.circuit.proxy;
 
 import me.dmillerw.circuit.block.BlockRegistry;
-import me.dmillerw.circuit.client.model.loader.CableModelLoader;
+import me.dmillerw.circuit.client.model.loader.BaseModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -16,7 +16,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-        ModelLoaderRegistry.registerLoader(new CableModelLoader());
+        ModelLoaderRegistry.registerLoader(new BaseModelLoader());
 
         BlockRegistry.initializeBlockModels();
     }

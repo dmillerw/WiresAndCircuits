@@ -2,7 +2,8 @@ package me.dmillerw.circuit.block.cable;
 
 import me.dmillerw.circuit.lib.ModInfo;
 import me.dmillerw.circuit.lib.TabCircuit;
-import me.dmillerw.circuit.lib.property.UnlistedBoolean;
+import me.dmillerw.circuit.lib.property.UnlistedConnectionType;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -15,7 +16,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,6 +30,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * @author dmillerw
  */
@@ -33,14 +39,14 @@ public class BlockCable extends BlockContainer {
 
     public static final String NAME = "cable";
 
-    public static final UnlistedBoolean DOWN = new UnlistedBoolean("down");
-    public static final UnlistedBoolean UP = new UnlistedBoolean("up");
-    public static final UnlistedBoolean NORTH = new UnlistedBoolean("north");
-    public static final UnlistedBoolean SOUTH = new UnlistedBoolean("south");
-    public static final UnlistedBoolean WEST = new UnlistedBoolean("west");
-    public static final UnlistedBoolean EAST = new UnlistedBoolean("east");
+    public static final UnlistedConnectionType DOWN = new UnlistedConnectionType("down");
+    public static final UnlistedConnectionType UP = new UnlistedConnectionType("up");
+    public static final UnlistedConnectionType NORTH = new UnlistedConnectionType("north");
+    public static final UnlistedConnectionType SOUTH = new UnlistedConnectionType("south");
+    public static final UnlistedConnectionType WEST = new UnlistedConnectionType("west");
+    public static final UnlistedConnectionType EAST = new UnlistedConnectionType("east");
 
-    public static final IUnlistedProperty[] PROPERTIES = new IUnlistedProperty[] {
+    public static final UnlistedConnectionType[] PROPERTIES = new UnlistedConnectionType[] {
             DOWN, UP, NORTH, SOUTH, WEST, EAST
     };
 
@@ -64,20 +70,19 @@ public class BlockCable extends BlockContainer {
 
     @SideOnly(Side.CLIENT)
     public void initializeBlockModel() {
-        StateMapperBase ignoreState = new StateMapperBase() {
+        ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return new ModelResourceLocation(getRegistryName(), "normal");
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                return new ModelResourceLocation(ModInfo.ID + ":cable");
             }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
+        });
     }
 
     @SideOnly(Side.CLIENT)
     public void initializeItemModel() {
-        Item itemBlock = Item.REGISTRY.getObject(ModInfo.resourceLocation(NAME));
+        Item item = Item.REGISTRY.getObject(new ResourceLocation(ModInfo.ID, "cable"));
         ModelResourceLocation resourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, resourceLocation);
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, resourceLocation);
     }
 
     /* END MODEL HANDLING */
@@ -93,6 +98,44 @@ public class BlockCable extends BlockContainer {
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileCable cable = (TileCable) world.getTileEntity(pos);
         return cable.getRenderBlockstate(state);
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        ((TileCable)worldIn.getTileEntity(pos)).updateState();
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+        ((TileCable)worldIn.getTileEntity(pos)).updateState();
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        TileCable tile = (TileCable) source.getTileEntity(pos);
+        AxisAlignedBB aabb = new AxisAlignedBB(.3, .3, .3, .7, .7, .7);
+
+        if (tile != null) {
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                if (tile.isConnected(facing)) {
+                    aabb = aabb.addCoord(0.3 * facing.getFrontOffsetX(), 0.3 * facing.getFrontOffsetY(), 0.3 * facing.getFrontOffsetZ());
+                }
+            }
+        }
+
+        return aabb;
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+        return FULL_BLOCK_AABB.expandXyz(-.25);
+    }
+
+    /* RENDER HANDLING */
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
@@ -115,6 +158,8 @@ public class BlockCable extends BlockContainer {
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.SOLID;
     }
+
+    /* END RENDER HANDLING */
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {

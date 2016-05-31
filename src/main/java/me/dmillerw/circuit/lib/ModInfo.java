@@ -14,7 +14,4 @@ public class ModInfo {
     public static String prefix(String string) {
         return ID + ":" + string;
     }
-    public static ResourceLocation resourceLocation(String path) {
-        return new ResourceLocation(ID, path);
-    }
 }
