@@ -31,15 +31,20 @@ import static me.dmillerw.circuit.block.cable.BlockCable.CONNECTOR_SIZE;
  */
 public class CableBakedModel implements IBakedModel {
 
-    private TextureAtlasSprite spriteCable;
-    private TextureAtlasSprite spriteCableEnd;
+
+    private TextureAtlasSprite spriteCableOff;
+    private TextureAtlasSprite spriteCableOffEnd;
+    private TextureAtlasSprite spriteCableOn;
+    private TextureAtlasSprite spriteCableOnEnd;
     
     private VertexFormat format;
 
     public CableBakedModel(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         this.format = format;
-        this.spriteCable = bakedTextureGetter.apply(new ResourceLocation(ModInfo.ID, "blocks/cable"));
-        this.spriteCableEnd = bakedTextureGetter.apply(new ResourceLocation(ModInfo.ID, "blocks/cable_end"));
+        this.spriteCableOff = bakedTextureGetter.apply(new ResourceLocation(ModInfo.ID, "blocks/cable_off"));
+        this.spriteCableOffEnd = bakedTextureGetter.apply(new ResourceLocation(ModInfo.ID, "blocks/cable_end_off"));
+        this.spriteCableOn = bakedTextureGetter.apply(new ResourceLocation(ModInfo.ID, "blocks/cable_on"));
+        this.spriteCableOnEnd = bakedTextureGetter.apply(new ResourceLocation(ModInfo.ID, "blocks/cable_end_on"));
     }
 
     private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal, Vec3d vertex, float u, float v, TextureAtlasSprite sprite) {
@@ -122,12 +127,17 @@ public class CableBakedModel implements IBakedModel {
 
         IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
 
+        Boolean active = extendedBlockState.getValue(BlockCable.CONNECTED);
+
         EnumConnectionType north = extendedBlockState.getValue(BlockCable.NORTH);
         EnumConnectionType south = extendedBlockState.getValue(BlockCable.SOUTH);
         EnumConnectionType west = extendedBlockState.getValue(BlockCable.WEST);
         EnumConnectionType east = extendedBlockState.getValue(BlockCable.EAST);
         EnumConnectionType up = extendedBlockState.getValue(BlockCable.UP);
         EnumConnectionType down = extendedBlockState.getValue(BlockCable.DOWN);
+
+        final TextureAtlasSprite cable = active ? spriteCableOn : spriteCableOff;
+        final TextureAtlasSprite end = active ? spriteCableOnEnd : spriteCableOffEnd;
 
         List<BakedQuad> quads = new ArrayList<>();
 
@@ -138,28 +148,28 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, 1, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, 1, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1, 1 - CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             if (up.renderConnector()) {
                 // CONNECTOR
@@ -168,28 +178,28 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1 - CONNECTOR_SIZE, 1, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 1, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 1, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE,     1, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE,     1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE,     1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE,     1, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 // CONNECTOR CAP
                 quads.add(createQuad(
@@ -197,14 +207,14 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, 0.999, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 0.999, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 0.999, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 0.999, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
             }
         } else {
             quads.add(createQuad(
@@ -212,7 +222,7 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
-                    spriteCableEnd));
+                    end));
         }
 
         // Y - 0 - 1
@@ -222,28 +232,28 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 0, 1 - CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, 0, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 0, CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 0, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 0, CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, 0, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 0, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             if (down.renderConnector()) {
                 // CONNECTOR
@@ -252,28 +262,28 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 0, CONNECTOR_SIZE),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 0, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 // CONNECTOR CAP
                 quads.add(createQuad(
@@ -281,17 +291,17 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1 - CONNECTOR_SIZE, 0.001, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, 0.001, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, 0.001, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_DEPTH, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
             }
         } else {
-            quads.add(createQuad(new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), spriteCableEnd));
+            quads.add(createQuad(new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), end));
         }
 
         // X - 0 - 1
@@ -301,28 +311,28 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             quads.add(createQuad(
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCable));
+                    cable));
 
             if (east.renderConnector()) {
                 quads.add(createQuad(
@@ -330,45 +340,45 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(0.999, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(0.999, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(0.999, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(0.999, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(1 - CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
             }
         } else {
-            quads.add(createQuad(new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), spriteCableEnd));
+            quads.add(createQuad(new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), end));
         }
 
         if (west.renderCable()) {
@@ -377,28 +387,28 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), 
                     new Vec3d(0, 1 - CABLE_SIZE, CABLE_SIZE), 
-                    spriteCable));
+                    cable));
             
             quads.add(createQuad(
                     new Vec3d(0, CABLE_SIZE, CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), 
                     new Vec3d(0, CABLE_SIZE, 1 - CABLE_SIZE), 
-                    spriteCable));
+                    cable));
             
             quads.add(createQuad(
                     new Vec3d(0, 1 - CABLE_SIZE, CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), 
                     new Vec3d(0, CABLE_SIZE, CABLE_SIZE), 
-                    spriteCable));
+                    cable));
             
             quads.add(createQuad(
                     new Vec3d(0, CABLE_SIZE, 1 - CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), 
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
                     new Vec3d(0, 1 - CABLE_SIZE, 1 - CABLE_SIZE), 
-                    spriteCable));
+                    cable));
 
             if (west.renderConnector()) {
                 quads.add(createQuad(
@@ -406,45 +416,45 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(0, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
                 
                 quads.add(createQuad(
                         new Vec3d(0, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(0, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
                 
                 quads.add(createQuad(
                         new Vec3d(0, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(0, CONNECTOR_SIZE, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
                 
                 quads.add(createQuad(
                         new Vec3d(0, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(0, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(CONNECTOR_DEPTH, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(0.001, CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(0.001, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE),
                         new Vec3d(0.001, 1 - CONNECTOR_SIZE, CONNECTOR_SIZE),
                         new Vec3d(0.001, CONNECTOR_SIZE, CONNECTOR_SIZE),
-                        spriteCableEnd));
+                        end));
             }
         } else {
-            quads.add(createQuad(new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), spriteCableEnd));
+            quads.add(createQuad(new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE), new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE), new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE), end));
         }
 
         if (north.renderCable()) {
@@ -453,28 +463,28 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 0),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 0),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 0),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 0),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 0),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 0),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 0),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 0),
-                    spriteCable, 2));
+                    cable, 2));
 
             if (north.renderConnector()) {
                 quads.add(createQuad(
@@ -482,42 +492,42 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 0),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, CONNECTOR_DEPTH),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0.001),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE,  0.001),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE,  0.001),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE,  0.001),
-                        spriteCableEnd));
+                        end));
             }
         } else {
             quads.add(createQuad(
@@ -525,7 +535,7 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, CABLE_SIZE),
-                    spriteCableEnd));
+                    end));
         }
 
         if (south.renderCable()) {
@@ -534,28 +544,28 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1),
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1),
-                    spriteCable, 2));
+                    cable, 2));
 
             quads.add(createQuad(
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCable, 2));
+                    cable, 2));
 
             if (south.renderConnector()) {
                 quads.add(createQuad(
@@ -563,42 +573,42 @@ public class CableBakedModel implements IBakedModel {
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
-                        spriteCableEnd, 2));
+                        end, 2));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE, 1 - CONNECTOR_DEPTH),
-                        spriteCableEnd));
+                        end));
 
                 quads.add(createQuad(
                         new Vec3d(CONNECTOR_SIZE, CONNECTOR_SIZE,  0.999),
                         new Vec3d(1 - CONNECTOR_SIZE, CONNECTOR_SIZE,  0.999),
                         new Vec3d(1 - CONNECTOR_SIZE, 1 - CONNECTOR_SIZE,  0.999),
                         new Vec3d(CONNECTOR_SIZE, 1 - CONNECTOR_SIZE, 0.999),
-                        spriteCableEnd));
+                        end));
             }
         } else {
             quads.add(createQuad(
@@ -606,7 +616,7 @@ public class CableBakedModel implements IBakedModel {
                     new Vec3d(1 - CABLE_SIZE, CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(1 - CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
                     new Vec3d(CABLE_SIZE, 1 - CABLE_SIZE, 1 - CABLE_SIZE),
-                    spriteCableEnd));
+                    end));
         }
 
         return quads;
@@ -634,7 +644,7 @@ public class CableBakedModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return spriteCable;
+        return spriteCableOff;
     }
 
     @Override

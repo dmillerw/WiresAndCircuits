@@ -29,6 +29,6 @@ public enum EnumConnectionType implements IStringSerializable {
 
     @Override
     public String getName() {
-        return this.name();
+        return this.name().toLowerCase();
     }
 }

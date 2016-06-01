@@ -1,5 +1,26 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "circuit:cpu",
+    "textures": {
+      "top": "circuit:blocks/cpu_top_off"
+    }
+  },
   "variants": {
-    "normal": { "model": "circuit:cpu" }
+    "normal": [{}],
+    "inventory": [{}],
+    "state": {
+      "off": {},
+      "running": {
+        "textures": {
+          "top": "circuit:blocks/cpu_top_on"
+        }
+      },
+      "error": {
+        "textures": {
+          "top": "circuit:blocks/cpu_top_err"
+        }
+      }
+    }
   }
 }

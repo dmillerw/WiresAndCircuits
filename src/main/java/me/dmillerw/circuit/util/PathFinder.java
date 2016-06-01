@@ -25,12 +25,18 @@ public class PathFinder {
         this.connectedBlocks = Sets.newHashSet();
     }
 
-    public PathFinder find(BiFunction<? super BlockPos, EnumFacing, Boolean> function) {
-        if (function.apply(start, null))
+    public PathFinder find(boolean ignoreStart, BiFunction<? super BlockPos, EnumFacing, Boolean> function) {
+        if (!ignoreStart) {
+            if (!function.apply(start, null))
+                return this;
+
+            connectedBlocks.add(start);
+        }
 
         for (EnumFacing facing : EnumFacing.VALUES) {
             find(start.offset(facing), facing.getOpposite(), function);
         }
+
         return this;
     }
 

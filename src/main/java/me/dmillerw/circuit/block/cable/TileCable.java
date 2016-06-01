@@ -1,25 +1,24 @@
 package me.dmillerw.circuit.block.cable;
 
+import me.dmillerw.circuit.api.IGroupOwner;
 import me.dmillerw.circuit.block.BlockRegistry;
-import me.dmillerw.circuit.block.cpu.TileCPU;
+import me.dmillerw.circuit.block.core.TileCore;
 import me.dmillerw.circuit.lib.property.EnumConnectionType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
 /**
  * @author dmillerw
  */
-public class TileCable extends TileEntity {
+public class TileCable extends TileCore {
 
-    private TileCPU masterCpu;
+    private boolean clientHasOwner = false;
+
+    private IGroupOwner groupOwner;
 
     private EnumConnectionType[] connectionMap = new EnumConnectionType[6];
 
@@ -29,41 +28,29 @@ public class TileCable extends TileEntity {
 
     /* NBT */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        NBTTagCompound tag = super.writeToNBT(compound);
+    public NBTTagCompound writeCustomTag(NBTTagCompound tag, boolean clientUpdate) {
+        super.writeCustomTag(tag, clientUpdate);
 
         for (int i=0; i<connectionMap.length; i++) {
-            compound.setInteger("connectionMap#" + i, connectionMap[i].ordinal());
+            tag.setInteger("connectionMap#" + i, connectionMap[i].ordinal());
         }
+
+        if (clientUpdate)
+            tag.setBoolean("hasOwner", groupOwner != null);
 
         return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
+    public void readCustomTag(NBTTagCompound tag, boolean clientUpdate) {
+        super.readCustomTag(tag, clientUpdate);
 
         for (int i=0; i<connectionMap.length; i++) {
-            connectionMap[i] = EnumConnectionType.getValues()[compound.getInteger("connectionMap#" + i)];
+            connectionMap[i] = EnumConnectionType.getValues()[tag.getInteger("connectionMap#" + i)];
         }
-    }
 
-    /* NETWORKING */
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return writeToNBT(new NBTTagCompound());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.getNbtCompound());
-        worldObj.markBlockRangeForRenderUpdate(pos, pos);
+        if (clientUpdate)
+            clientHasOwner = tag.getBoolean("hasOwner");
     }
 
     /* STATE HANDLING */
@@ -98,16 +85,19 @@ public class TileCable extends TileEntity {
         for (int i=0; i<connectionMap.length; i++) {
             eState = eState.withProperty(BlockCable.PROPERTIES[i], connectionMap[i]);
         }
+        eState = eState.withProperty(BlockCable.CONNECTED, clientHasOwner);
 
         return eState;
     }
 
     /* OWNERSHIP */
-    public TileCPU getMaster() {
-        return masterCpu;
+    public IGroupOwner getGroupOwner() {
+        return groupOwner;
     }
 
-    public void setMaster(TileCPU cpu) {
-        masterCpu = cpu;
+    public void setGroupOwner(IGroupOwner groupOwner) {
+        this.groupOwner = groupOwner;
+
+        markDirty();
     }
 }
