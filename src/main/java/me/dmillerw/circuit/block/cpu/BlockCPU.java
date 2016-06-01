@@ -44,16 +44,6 @@ public class BlockCPU extends BlockTileCore implements ITileEntityProvider {
 
     /* MODEL HANDLING */
     @SideOnly(Side.CLIENT)
-    public void initializeBlockModel() {
-//        ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
-//            @Override
-//            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-//                return new ModelResourceLocation(ModInfo.ID + ":cpu");
-//            }
-//        });
-    }
-
-    @SideOnly(Side.CLIENT)
     public void initializeItemModel() {
 //        Item item = Item.REGISTRY.getObject(new ResourceLocation(ModInfo.ID, "cpu"));
 //        ModelResourceLocation resourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");

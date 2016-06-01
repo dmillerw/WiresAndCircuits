@@ -9,6 +9,7 @@ import me.dmillerw.circuit.block.core.TileCore;
 import me.dmillerw.circuit.util.PathFinder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Set;
@@ -16,30 +17,18 @@ import java.util.Set;
 /**
  * @author dmillerw
  */
-public class TileCPU extends TileCore implements IGroupOwner {
+public class TileCPU extends TileCore implements IGroupOwner, ITickable {
 
     public Set<BlockPos> cables = Sets.newHashSet();
 
     private boolean analyzedOnLoad = false;
 
-//    @Override
-//    public void update() {
-//        if (worldObj != null && !worldObj.isRemote && !analyzedOnLoad) {
-//            reanalayze();
-//            analyzedOnLoad = true;
-//        }
-//    }
-
     @Override
-    public NBTTagCompound writeCustomTag(NBTTagCompound tag, boolean clientUpdate) {
-        tag.setBoolean("dummy", true);
-        return super.writeCustomTag(tag, clientUpdate);
-    }
-
-    @Override
-    public void readCustomTag(NBTTagCompound tag, boolean clientUpdate) {
-        super.readCustomTag(tag, clientUpdate);
-        tag.getBoolean("dummy");
+    public void update() {
+        if (worldObj != null && !worldObj.isRemote && !analyzedOnLoad) {
+            reanalayze();
+            analyzedOnLoad = true;
+        }
     }
 
     /* IGROUPOWNER */
