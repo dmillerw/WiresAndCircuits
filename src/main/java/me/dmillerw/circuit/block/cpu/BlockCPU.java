@@ -1,5 +1,6 @@
 package me.dmillerw.circuit.block.cpu;
 
+import me.dmillerw.circuit.item.ItemRegistry;
 import me.dmillerw.circuit.lib.ModInfo;
 import me.dmillerw.circuit.lib.TabCircuit;
 import net.minecraft.block.Block;
@@ -9,17 +10,24 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * @author dmillerw
@@ -55,11 +63,20 @@ public class BlockCPU extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote && heldItem.getItem() == ItemRegistry.confGun) {
+            TileCPU cpu = (TileCPU) worldIn.getTileEntity(pos);
+            playerIn.addChatComponentMessage(new TextComponentString("Connected Cables: " + cpu.cables.size()));
+        }
+        return heldItem.getItem() == ItemRegistry.confGun;
     }
 
     /* MODEL HANDLING */
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
 
     @SideOnly(Side.CLIENT)
     public void initializeBlockModel() {

@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class TileCPU extends TileEntity {
 
-    private Set<BlockPos> cables = Sets.newHashSet();
+    public Set<BlockPos> cables = Sets.newHashSet();
     private Set<BlockPos> blocks = Sets.newHashSet();
 
     public void analyze() {

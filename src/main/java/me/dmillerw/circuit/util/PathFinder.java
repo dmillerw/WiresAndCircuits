@@ -26,7 +26,8 @@ public class PathFinder {
     }
 
     public PathFinder find(BiFunction<? super BlockPos, EnumFacing, Boolean> function) {
-        connectedBlocks.add(start);
+        if (function.apply(start, null))
+
         for (EnumFacing facing : EnumFacing.VALUES) {
             find(start.offset(facing), facing.getOpposite(), function);
         }
