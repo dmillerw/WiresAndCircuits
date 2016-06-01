@@ -86,7 +86,7 @@ public class BlockCable extends BlockTileCore {
     public void initializeItemModel() {
         Item item = Item.REGISTRY.getObject(new ResourceLocation(ModInfo.ID, "cable"));
         ModelResourceLocation resourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, resourceLocation);
+        ModelLoader.setCustomModelResourceLocation(item, 0, resourceLocation);
     }
     /* END MODEL HANDLING */
 
