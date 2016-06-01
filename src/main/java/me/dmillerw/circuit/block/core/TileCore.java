@@ -25,7 +25,7 @@ public class TileCore extends TileEntity {
         markDirty();
 
         final IBlockState state = worldObj.getBlockState(getPos());
-        worldObj.markAndNotifyBlock(getPos(), null, state, state, 3);
+        worldObj.notifyBlockUpdate(getPos(), state, state, 3);
     }
 
     /* OVERRIDES */
