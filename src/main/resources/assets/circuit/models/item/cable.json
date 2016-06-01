@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "circuit:blocks/cable_end"
+    "all": "circuit:blocks/cable_end_on"
   },
   "display": {
     "thirdperson": {

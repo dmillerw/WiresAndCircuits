@@ -98,6 +98,9 @@ public class TileCable extends TileCore {
     public void setGroupOwner(IGroupOwner groupOwner) {
         this.groupOwner = groupOwner;
 
-        markDirty();
+        // There must be a better way to handle this
+        BlockCable.ignoreNeighborUpdates = true;
+        markForUpdate();
+        BlockCable.ignoreNeighborUpdates = false;
     }
 }

@@ -1,5 +1,6 @@
 package me.dmillerw.circuit.block.core;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -18,6 +19,13 @@ public class TileCore extends TileEntity {
 
     public void readCustomTag(NBTTagCompound tag, boolean clientUpdate) {
 
+    }
+
+    public void markForUpdate() {
+        markDirty();
+
+        final IBlockState state = worldObj.getBlockState(getPos());
+        worldObj.markAndNotifyBlock(getPos(), null, state, state, 3);
     }
 
     /* OVERRIDES */

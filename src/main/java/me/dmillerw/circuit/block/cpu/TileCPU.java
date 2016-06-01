@@ -40,7 +40,19 @@ public class TileCPU extends TileCore implements IGroupOwner, ITickable {
                 return state.getBlock() == BlockRegistry.cable;
             });
 
-            cableFinder.forEach(cables::add);
+            Set<BlockPos> newCables = Sets.newHashSet();
+            cableFinder.forEach(newCables::add);
+
+            cables.forEach((pos) -> {
+                if (!newCables.contains(pos)) {
+                    TileCable cable = (TileCable) worldObj.getTileEntity(pos);
+                    if (cable != null) cable.setGroupOwner(null);
+                }
+            });
+
+            cables.clear();
+            cables.addAll(newCables);
+
             cables.forEach((pos) -> {
                 TileCable cable = (TileCable) worldObj.getTileEntity(pos);
                 if (cable != null) cable.setGroupOwner(this);

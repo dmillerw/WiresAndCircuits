@@ -13,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,6 +33,8 @@ import javax.annotation.Nullable;
  * @author dmillerw
  */
 public class BlockCable extends BlockTileCore {
+
+    public static boolean ignoreNeighborUpdates = false;
 
     public static final double CABLE_SIZE = 0.4D;
     public static final double CONNECTOR_SIZE = 0.3D;
@@ -69,12 +73,12 @@ public class BlockCable extends BlockTileCore {
     @SideOnly(Side.CLIENT)
     @Override
     public void initializeBlockModel() {
-//        ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
-//            @Override
-//            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-//                return new ModelResourceLocation(ModInfo.ID + ":cable");
-//            }
-//        });
+        ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                return new ModelResourceLocation(ModInfo.ID + ":cable");
+            }
+        });
     }
 
     @SideOnly(Side.CLIENT)
@@ -125,6 +129,10 @@ public class BlockCable extends BlockTileCore {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+        // There must be a better way to handle this
+        if (ignoreNeighborUpdates)
+            return;
+
         if (!worldIn.isRemote) {
             TileCable cable = (TileCable) worldIn.getTileEntity(pos);
             if (cable != null) {
@@ -136,6 +144,22 @@ public class BlockCable extends BlockTileCore {
                 }
             }
         }
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        IGroupOwner owner = null;
+        if (!worldIn.isRemote) {
+            TileCable cable = (TileCable) worldIn.getTileEntity(pos);
+            if (cable != null) {
+                owner = cable.getGroupOwner();
+            }
+        }
+
+        super.breakBlock(worldIn, pos, state);
+
+        if (owner != null)
+            owner.reanalayze();
     }
 
     @Override
