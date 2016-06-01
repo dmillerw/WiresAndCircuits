@@ -1,9 +1,9 @@
 package me.dmillerw.circuit.block.cable;
 
 import me.dmillerw.circuit.block.BlockRegistry;
+import me.dmillerw.circuit.block.cpu.TileCPU;
 import me.dmillerw.circuit.lib.property.EnumConnectionType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,11 +19,15 @@ import java.util.Arrays;
  */
 public class TileCable extends TileEntity {
 
+    private TileCPU masterCpu;
+
     private EnumConnectionType[] connectionMap = new EnumConnectionType[6];
+
     public TileCable() {
         Arrays.fill(connectionMap, EnumConnectionType.NONE);
     }
 
+    /* NBT */
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tag = super.writeToNBT(compound);
@@ -44,6 +48,7 @@ public class TileCable extends TileEntity {
         }
     }
 
+    /* NETWORKING */
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
@@ -61,6 +66,7 @@ public class TileCable extends TileEntity {
         worldObj.markBlockRangeForRenderUpdate(pos, pos);
     }
 
+    /* STATE HANDLING */
     public void updateState() {
         if (!worldObj.isRemote) {
             for (EnumFacing facing : EnumFacing.VALUES) {
@@ -68,7 +74,7 @@ public class TileCable extends TileEntity {
 
                 if (state.getBlock() == BlockRegistry.cable) {
                     connectionMap[facing.ordinal()] = EnumConnectionType.CABLE;
-                } else if (state.getBlock() == Blocks.GLASS) {
+                } else if (state.getBlock() == BlockRegistry.cpu) {
                     connectionMap[facing.ordinal()] = EnumConnectionType.BLOCK;
                 } else {
                     connectionMap[facing.ordinal()] = EnumConnectionType.NONE;
@@ -94,5 +100,14 @@ public class TileCable extends TileEntity {
         }
 
         return eState;
+    }
+
+    /* OWNERSHIP */
+    public TileCPU getMaster() {
+        return masterCpu;
+    }
+
+    public void setMaster(TileCPU cpu) {
+        masterCpu = cpu;
     }
 }

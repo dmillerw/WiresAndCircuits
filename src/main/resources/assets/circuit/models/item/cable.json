@@ -1,5 +1,8 @@
 {
-  "parent": "circuit:block/cable",
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "circuit:blocks/cable_end"
+  },
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],
