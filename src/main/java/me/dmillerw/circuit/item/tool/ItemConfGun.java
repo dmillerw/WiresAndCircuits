@@ -96,11 +96,11 @@ public class ItemConfGun extends Item {
                     TileCable cable = (TileCable) world.getTileEntity(pos);
 
                     String owner = "null";
-                    if (cable != null && cable.getGroupOwner() != null) {
-                        owner = ((TileEntity)cable.getGroupOwner()).getPos().toString();
+                    if (cable != null && cable.getGridOwner() != null) {
+                        owner = ((TileEntity)cable.getGridOwner()).getPos().toString();
                     }
 
-                    player.addChatComponentMessage(new TextComponentString("IGroupOwner: " + owner));
+                    player.addChatComponentMessage(new TextComponentString("IGridOwner: " + owner));
                     return EnumActionResult.SUCCESS;
                 } else if (state.getBlock() == BlockRegistry.cpu) {
                     TileCPU cpu = (TileCPU) world.getTileEntity(pos);

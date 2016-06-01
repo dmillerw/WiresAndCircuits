@@ -55,6 +55,10 @@ public class PathFinder {
         return;
     }
 
+    public Set<BlockPos> getConnectedBlocks() {
+        return connectedBlocks;
+    }
+
     public void forEach(Consumer<? super BlockPos> consumer) {
         connectedBlocks.forEach(consumer);
     }

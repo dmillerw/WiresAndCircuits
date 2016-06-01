@@ -1,6 +1,6 @@
 package me.dmillerw.circuit.block.cable;
 
-import me.dmillerw.circuit.api.IGroupOwner;
+import me.dmillerw.circuit.api.grid.IGridOwner;
 import me.dmillerw.circuit.block.core.BlockTileCore;
 import me.dmillerw.circuit.block.core.TileCore;
 import me.dmillerw.circuit.lib.ModInfo;
@@ -11,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
@@ -86,7 +85,7 @@ public class BlockCable extends BlockTileCore {
     public void initializeItemModel() {
         Item item = Item.REGISTRY.getObject(new ResourceLocation(ModInfo.ID, "cable"));
         ModelResourceLocation resourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, resourceLocation);
+        ModelLoader.setCustomModelResourceLocation(item, 0, resourceLocation);
     }
     /* END MODEL HANDLING */
 
@@ -138,7 +137,7 @@ public class BlockCable extends BlockTileCore {
             if (cable != null) {
                 cable.updateState();
 
-                IGroupOwner owner = cable.getGroupOwner();
+                IGridOwner owner = cable.getGridOwner();
                 if (owner != null) {
                     owner.reanalayze();
                 }
@@ -148,11 +147,11 @@ public class BlockCable extends BlockTileCore {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        IGroupOwner owner = null;
+        IGridOwner owner = null;
         if (!worldIn.isRemote) {
             TileCable cable = (TileCable) worldIn.getTileEntity(pos);
             if (cable != null) {
-                owner = cable.getGroupOwner();
+                owner = cable.getGridOwner();
             }
         }
 

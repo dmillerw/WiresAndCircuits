@@ -19,13 +19,12 @@ public class ClientProxy extends CommonProxy {
         ModelLoaderRegistry.registerLoader(new BaseModelLoader());
 
         BlockRegistry.initializeBlockModels();
+        BlockRegistry.initializeItemModels();
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-
-        BlockRegistry.initializeItemModels();
     }
 
     @Override

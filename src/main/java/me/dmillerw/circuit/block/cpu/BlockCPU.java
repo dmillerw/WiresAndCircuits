@@ -45,10 +45,9 @@ public class BlockCPU extends BlockTileCore implements ITileEntityProvider {
     /* MODEL HANDLING */
     @SideOnly(Side.CLIENT)
     public void initializeItemModel() {
-//        Item item = Item.REGISTRY.getObject(new ResourceLocation(ModInfo.ID, "cpu"));
-//        ModelResourceLocation resourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
-//        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, resourceLocation);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().toString()));
+        Item item = Item.REGISTRY.getObject(getRegistryName());
+        ModelResourceLocation resourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
+        ModelLoader.setCustomModelResourceLocation(item, 0, resourceLocation);
     }
     /* END MODEL HANDLING */
 

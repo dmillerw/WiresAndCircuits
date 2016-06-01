@@ -1,6 +1,6 @@
 package me.dmillerw.circuit.block.cable;
 
-import me.dmillerw.circuit.api.IGroupOwner;
+import me.dmillerw.circuit.api.grid.IGridOwner;
 import me.dmillerw.circuit.block.BlockRegistry;
 import me.dmillerw.circuit.block.core.TileCore;
 import me.dmillerw.circuit.lib.property.EnumConnectionType;
@@ -18,7 +18,7 @@ public class TileCable extends TileCore {
 
     private boolean clientHasOwner = false;
 
-    private IGroupOwner groupOwner;
+    private IGridOwner groupOwner;
 
     private EnumConnectionType[] connectionMap = new EnumConnectionType[6];
 
@@ -91,11 +91,11 @@ public class TileCable extends TileCore {
     }
 
     /* OWNERSHIP */
-    public IGroupOwner getGroupOwner() {
+    public IGridOwner getGridOwner() {
         return groupOwner;
     }
 
-    public void setGroupOwner(IGroupOwner groupOwner) {
+    public void setGridOwner(IGridOwner groupOwner) {
         this.groupOwner = groupOwner;
 
         // There must be a better way to handle this

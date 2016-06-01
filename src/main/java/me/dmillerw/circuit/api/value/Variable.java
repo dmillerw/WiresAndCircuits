@@ -1,6 +1,4 @@
-package me.dmillerw.circuit.api;
-
-import me.dmillerw.circuit.api.value.Value;
+package me.dmillerw.circuit.api.value;
 
 /**
  * @author dmillerw
