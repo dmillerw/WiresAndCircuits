@@ -21,8 +21,8 @@ public abstract class BlockCore extends Block {
 
         setCreativeTab(TabCircuit.INSTANCE);
 
-        setUnlocalizedName(getBlockName());
         setRegistryName(getBlockName());
+        setUnlocalizedName(getRegistryName().toString());
 
         GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this), getRegistryName());
